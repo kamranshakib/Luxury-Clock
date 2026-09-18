@@ -1,0 +1,58 @@
+{
+  "name": "luxury-clock",
+  "version": "1.0.0",
+  "description": "A premium, modern desktop clock.",
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron .",
+    "build:win": "electron-builder build --win"
+  },
+  "keywords": [
+    "clock",
+    "desktop",
+    "luxury",
+    "electron"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^32.3.3",
+    "electron-builder": "^24.13.3",
+    "electron-packager": "^17.1.2",
+    "electron-winstaller": "^5.4.4",
+    "jimp": "^1.6.1",
+    "png-to-ico": "^3.0.2"
+  },
+  "build": {
+    "appId": "com.luxuryclock.app",
+    "productName": "Luxury Clock",
+    "directories": {
+      "output": "release"
+    },
+    "win": {
+      "icon": "assets/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Luxury Clock",
+      "runAfterFinish": true,
+      "deleteAppDataOnUninstall": false,
+      "artifactName": "Luxury-Clock-Setup.exe"
+    }
+  },
+  "dependencies": {
+    "active-win": "^9.0.0"
+  }
+}

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="minimal">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Use Outfit font for a modern iPhone lock screen aesthetic -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <title>Luxury Clock</title>
+</head>
+<body>
+  
+  <div class="app-container" id="app-container">
+    
+    <!-- MAIN CLOCK INTERFACE -->
+    <main class="clock-interface drag-area" id="clock-interface">
+      <div class="clock-display">
+        <div class="time-container">
+          <span class="time-main" id="time-main">00:00</span>
+          <span class="time-seconds" id="time-seconds">00</span>
+      </div>
+      
+      <!-- Subtle context menu hint on hover -->
+      <div class="hover-hint no-drag" id="settings-trigger">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"></circle>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+        </svg>
+      </div>
+    </main>
+
+    <!-- SETTINGS PANEL OVERLAY -->
+    <aside class="settings-panel" id="settings-panel">
+      <header class="settings-header drag-area">
+        <h2>Preferences</h2>
+        <button class="close-btn no-drag" id="close-settings">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </header>
+      
+      <div class="settings-content">
+        <!-- Display Settings -->
+        <div class="settings-group">
+          <h3>Display</h3>
+          
+          <div class="setting-item">
+            <span>24-Hour Format</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-24hr">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <span>Show Seconds</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-seconds">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+        
+        <!-- Appearance Settings -->
+        <div class="settings-group">
+          <h3>Appearance</h3>
+          
+          <div class="setting-item">
+            <span>Theme</span>
+            <select id="setting-theme" class="luxury-select">
+              <option value="auto">Auto (Windows Theme)</option>
+              <option value="obsidian">Obsidian</option>
+              <option value="silver">Silver</option>
+              <option value="midnight">Midnight</option>
+              <option value="gold">Gold</option>
+              <option value="minimal">Minimal Dark</option>
+              <option value="minimal-light">Minimal Light</option>
+            </select>
+          </div>
+          
+          <div class="setting-item column">
+            <div class="slider-header">
+              <span>Clock Size</span>
+              <span class="value-display" id="val-size">100%</span>
+            </div>
+            <input type="range" min="0.5" max="2" step="0.1" id="setting-size" class="luxury-slider">
+          </div>
+          
+          <div class="setting-item column">
+            <div class="slider-header">
+              <span>Background Opacity</span>
+              <span class="value-display" id="val-opacity">100%</span>
+            </div>
+            <input type="range" min="0" max="1" step="0.05" id="setting-opacity" class="luxury-slider">
+          </div>
+          
+          <div class="setting-item column">
+            <div class="slider-header">
+              <span>Glass Blur</span>
+              <span class="value-display" id="val-blur">10px</span>
+            </div>
+            <input type="range" min="0" max="30" step="1" id="setting-blur" class="luxury-slider">
+          </div>
+        </div>
+
+        <!-- Behavior Settings -->
+        <div class="settings-group">
+          <h3>Behavior</h3>
+          
+          <div class="setting-item">
+            <span>Always on Top</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-top">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <span>Start with Windows</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-autostart">
+              <span class="slider round"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <span>Smooth Animations</span>
+            <label class="switch">
+              <input type="checkbox" id="setting-animations">
+              <span class="slider round"></span>
+            </label>
+          </div>
+        </div>
+
+      </div>
+      
+      <footer class="settings-footer">
+        <button id="btn-reset" class="btn-ghost">Reset Defaults</button>
+        <button id="btn-exit" class="btn-danger">Exit App</button>
+      </footer>
+    </aside>
+
+  </div>
+
+  <script src="app.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>
