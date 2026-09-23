@@ -6,11 +6,17 @@ using System.Runtime.InteropServices;
 using System.Windows.Interop;
 using System.Windows.Controls.Primitives;
 using Microsoft.Win32;
+using System.IO;
+using System.Net.Http;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace LuxuryClock
 {
     public partial class MainWindow : Window
     {
+        private const string CurrentVersion = "v2.0.0";
         private DispatcherTimer _timer;
 
         public MainWindow()
@@ -69,6 +75,8 @@ namespace LuxuryClock
             this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
 
             SendToBottom();
+
+            Task t = CheckForUpdatesAsync();
         }
 
         private void MainWindow_Activated(object sender, EventArgs e)
@@ -120,6 +128,75 @@ namespace LuxuryClock
                 
             if (newHeight >= this.MinHeight)
                 this.Height = newHeight;
+        }
+
+        private async Task CheckForUpdatesAsync()
+        {
+            try
+            {
+                using (var client = new HttpClient())
+                {
+                    client.DefaultRequestHeaders.Add("User-Agent", "LuxuryClock-Updater");
+                    string url = "https://api.github.com/repos/kamranshakib/Luxury-Clock/releases/latest";
+                    string json = await client.GetStringAsync(url);
+
+                    Match tagMatch = Regex.Match(json, "\"tag_name\"\\s*:\\s*\"([^\"]+)\"");
+                    if (tagMatch.Success)
+                    {
+                        string latestVersion = tagMatch.Groups[1].Value;
+                        if (latestVersion != CurrentVersion)
+                        {
+                            Match assetMatch = Regex.Match(json, "\"browser_download_url\"\\s*:\\s*\"([^\"]+\\.exe)\"");
+                            if (assetMatch.Success)
+                            {
+                                string downloadUrl = assetMatch.Groups[1].Value;
+                                await DownloadAndApplyUpdate(downloadUrl);
+                            }
+                        }
+                    }
+                }
+            }
+            catch { }
+        }
+
+        private async Task DownloadAndApplyUpdate(string url)
+        {
+            try
+            {
+                string exePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string exeDir = Path.GetDirectoryName(exePath);
+                string newExePath = Path.Combine(exeDir, "LuxuryClock_Update.exe");
+                string batPath = Path.Combine(exeDir, "update.bat");
+
+                using (var client = new HttpClient())
+                {
+                    byte[] fileBytes = await client.GetByteArrayAsync(url);
+                    File.WriteAllBytes(newExePath, fileBytes);
+                }
+
+                string exeName = Path.GetFileName(exePath);
+                string batContent = 
+                    "@echo off\r\n" +
+                    "ping 127.0.0.1 -n 3 > nul\r\n" +
+                    "del /q \"" + exeName + "\"\r\n" +
+                    "ren \"LuxuryClock_Update.exe\" \"" + exeName + "\"\r\n" +
+                    "start \"\" \"" + exeName + "\"\r\n" +
+                    "del \"%~f0\"";
+
+                File.WriteAllText(batPath, batContent);
+
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = batPath,
+                    CreateNoWindow = true,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    WorkingDirectory = exeDir
+                };
+                Process.Start(psi);
+
+                Application.Current.Dispatcher.Invoke(() => { Application.Current.Shutdown(); });
+            }
+            catch { }
         }
     }
 }
