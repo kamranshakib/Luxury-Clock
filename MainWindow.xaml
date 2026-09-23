@@ -17,31 +17,38 @@
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
                 
                 <!-- Time and Seconds -->
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <TextBlock x:Name="TimeText" Text="12:00" 
+                <Grid Width="460" Height="180" HorizontalAlignment="Center">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="370" />
+                        <ColumnDefinition Width="90" />
+                    </Grid.ColumnDefinitions>
+                    
+                    <TextBlock Grid.Column="0" x:Name="TimeText" Text="12:00" 
                                Foreground="White" 
-                               FontFamily="Bahnschrift, Segoe UI" 
+                               FontFamily="Segoe UI Black, Segoe UI" 
                                FontSize="130" 
-                               FontWeight="Bold" 
+                               FontWeight="Black" 
                                VerticalAlignment="Center"
+                               TextAlignment="Right"
                                Typography.NumeralAlignment="Tabular">
                         <TextBlock.Effect>
-                            <DropShadowEffect ShadowDepth="4" BlurRadius="15" Opacity="0.6" Direction="270" Color="Black"/>
+                            <DropShadowEffect ShadowDepth="4" BlurRadius="15" Opacity="0.8" Direction="270" Color="Black"/>
                         </TextBlock.Effect>
                     </TextBlock>
-                    <TextBlock x:Name="SecondsText" Text="00" 
-                               Foreground="#CCFFFFFF" 
-                               FontFamily="Bahnschrift, Segoe UI" 
+                    <TextBlock Grid.Column="1" x:Name="SecondsText" Text="00" 
+                               Foreground="#E0FFFFFF" 
+                               FontFamily="Segoe UI Black, Segoe UI" 
                                FontSize="45" 
-                               FontWeight="SemiBold" 
+                               FontWeight="Bold" 
                                Margin="8,0,0,30" 
                                VerticalAlignment="Bottom"
+                               TextAlignment="Left"
                                Typography.NumeralAlignment="Tabular">
                         <TextBlock.Effect>
-                            <DropShadowEffect ShadowDepth="2" BlurRadius="10" Opacity="0.5" Direction="270" Color="Black"/>
+                            <DropShadowEffect ShadowDepth="2" BlurRadius="10" Opacity="0.7" Direction="270" Color="Black"/>
                         </TextBlock.Effect>
                     </TextBlock>
-                </StackPanel>
+                </Grid>
             </StackPanel>
         </Viewbox>
 

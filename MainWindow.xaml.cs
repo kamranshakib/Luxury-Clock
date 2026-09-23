@@ -39,10 +39,11 @@ namespace LuxuryClock
                 RegistryKey rk = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
                 string appName = "LuxuryClockV2";
                 string appPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                string runValue = "\"" + appPath + "\"";
                 
-                if (rk.GetValue(appName) == null || rk.GetValue(appName).ToString() != appPath)
+                if (rk.GetValue(appName) == null || rk.GetValue(appName).ToString() != runValue)
                 {
-                    rk.SetValue(appName, appPath);
+                    rk.SetValue(appName, runValue);
                 }
             }
             catch { }
@@ -64,6 +65,9 @@ namespace LuxuryClock
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            this.Top = 0;
+            this.Left = (SystemParameters.PrimaryScreenWidth - this.Width) / 2;
+
             SendToBottom();
         }
 
