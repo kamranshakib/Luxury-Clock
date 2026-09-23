@@ -16,7 +16,7 @@ namespace LuxuryClock
 {
     public partial class MainWindow : Window
     {
-        private const string CurrentVersion = "v2.0.0";
+        private const string CurrentVersion = "v2.1.0";
         private DispatcherTimer _timer;
 
         public MainWindow()
