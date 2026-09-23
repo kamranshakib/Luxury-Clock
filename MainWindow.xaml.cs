@@ -18,6 +18,11 @@ namespace LuxuryClock
     {
         private const string CurrentVersion = "v2.1.0";
         private DispatcherTimer _timer;
+        private int _lastSecond = -1;
+        private int _lastHour = -1;
+        
+        private System.Windows.Media.MediaPlayer _tickPlayer;
+        private System.Windows.Media.MediaPlayer _hourPlayer;
 
         public MainWindow()
         {
@@ -28,6 +33,17 @@ namespace LuxuryClock
             _timer.Interval = TimeSpan.FromMilliseconds(100);
             _timer.Tick += Timer_Tick;
             _timer.Start();
+
+            // Initialize MediaPlayers for sounds
+            _tickPlayer = new System.Windows.Media.MediaPlayer();
+            // A soft short click from Windows media
+            _tickPlayer.Open(new Uri(@"C:\Windows\Media\Windows Navigation Start.wav", UriKind.Absolute));
+            _tickPlayer.Volume = 0.5; 
+
+            _hourPlayer = new System.Windows.Media.MediaPlayer();
+            // A relaxing chime from Windows media
+            _hourPlayer.Open(new Uri(@"C:\Windows\Media\Windows Notify Calendar.wav", UriKind.Absolute));
+            _hourPlayer.Volume = 1.0; 
 
             // Initial update
             UpdateTime();
@@ -95,6 +111,28 @@ namespace LuxuryClock
             
             TimeText.Text = now.ToString("HH:mm");
             SecondsText.Text = now.ToString("ss");
+
+            // Play tick sound every second
+            if (now.Second != _lastSecond)
+            {
+                if (_lastSecond != -1 && SoundToggleBtn.IsChecked == true) // Don't play on immediate startup
+                {
+                    _tickPlayer.Position = TimeSpan.Zero;
+                    _tickPlayer.Play();
+                }
+                _lastSecond = now.Second;
+            }
+
+            // Play hour sound when hour changes
+            if (now.Hour != _lastHour)
+            {
+                if (_lastHour != -1 && SoundToggleBtn.IsChecked == true) // Don't play on immediate startup
+                {
+                    _hourPlayer.Position = TimeSpan.Zero;
+                    _hourPlayer.Play();
+                }
+                _lastHour = now.Hour;
+            }
         }
 
         // Allows dragging the window by clicking anywhere on it
@@ -106,15 +144,17 @@ namespace LuxuryClock
             }
         }
 
-        // Show resize grip on hover
+        // Show resize grip and sound toggle on hover
         private void RootGrid_MouseEnter(object sender, MouseEventArgs e)
         {
             ResizeGrip.Visibility = Visibility.Visible;
+            SoundToggleBtn.Visibility = Visibility.Visible;
         }
 
         private void RootGrid_MouseLeave(object sender, MouseEventArgs e)
         {
             ResizeGrip.Visibility = Visibility.Collapsed;
+            SoundToggleBtn.Visibility = Visibility.Collapsed;
         }
 
         // Handle custom resizing from the thumb
