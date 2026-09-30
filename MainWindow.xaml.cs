@@ -34,18 +34,18 @@ namespace LuxuryClock
             _timer.Tick += Timer_Tick;
             _timer.Start();
 
-            // Initialize MediaPlayers for sounds
+         
             _tickPlayer = new System.Windows.Media.MediaPlayer();
-            // A soft short click from Windows media
+        
             _tickPlayer.Open(new Uri(@"C:\Windows\Media\Windows Navigation Start.wav", UriKind.Absolute));
             _tickPlayer.Volume = 0.5; 
 
             _hourPlayer = new System.Windows.Media.MediaPlayer();
-            // A relaxing chime from Windows media
+           
             _hourPlayer.Open(new Uri(@"C:\Windows\Media\Windows Notify Calendar.wav", UriKind.Absolute));
             _hourPlayer.Volume = 1.0; 
 
-            // Initial update
+         
             UpdateTime();
 
             this.Loaded += MainWindow_Loaded;
@@ -115,7 +115,7 @@ namespace LuxuryClock
             // Play tick sound every second
             if (now.Second != _lastSecond)
             {
-                if (_lastSecond != -1 && SoundToggleBtn.IsChecked == true) // Don't play on immediate startup
+                if (_lastSecond != -1 && SoundToggleBtn.IsChecked == true) 
                 {
                     _tickPlayer.Position = TimeSpan.Zero;
                     _tickPlayer.Play();
@@ -126,7 +126,7 @@ namespace LuxuryClock
             // Play hour sound when hour changes
             if (now.Hour != _lastHour)
             {
-                if (_lastHour != -1 && SoundToggleBtn.IsChecked == true) // Don't play on immediate startup
+                if (_lastHour != -1 && SoundToggleBtn.IsChecked == true) 
                 {
                     _hourPlayer.Position = TimeSpan.Zero;
                     _hourPlayer.Play();

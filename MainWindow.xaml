@@ -10,7 +10,7 @@
         ResizeMode="NoResize"
         MinHeight="150" MinWidth="200">
     
-    <!-- Use 01000000 (near transparent) so the entire window is easily draggable and detects mouse hover perfectly -->
+
     <Grid x:Name="RootGrid" Background="#01000000" MouseEnter="RootGrid_MouseEnter" MouseLeave="RootGrid_MouseLeave">
         
         <Viewbox Stretch="Uniform" Margin="15">
