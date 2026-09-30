@@ -186,11 +186,15 @@ namespace LuxuryClock
                         string latestVersion = tagMatch.Groups[1].Value;
                         if (latestVersion != CurrentVersion)
                         {
-                            Match assetMatch = Regex.Match(json, "\"browser_download_url\"\\s*:\\s*\"([^\"]+\\.exe)\"");
-                            if (assetMatch.Success)
+                            MatchCollection assetMatches = Regex.Matches(json, "\"browser_download_url\"\\s*:\\s*\"([^\"]+\\.exe)\"");
+                            foreach (Match match in assetMatches)
                             {
-                                string downloadUrl = assetMatch.Groups[1].Value;
-                                await DownloadAndApplyUpdate(downloadUrl);
+                                string downloadUrl = match.Groups[1].Value;
+                                if (downloadUrl.IndexOf("Setup", StringComparison.OrdinalIgnoreCase) == -1)
+                                {
+                                    await DownloadAndApplyUpdate(downloadUrl);
+                                    break;
+                                }
                             }
                         }
                     }
